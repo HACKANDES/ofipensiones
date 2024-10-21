@@ -5,6 +5,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.115.2",
+    "nltk>=3.9.1",
     "passlib[argon2]>=1.7.4",
     "psycopg[c]>=3.2.3",
     "pyjwt>=2.9.0",

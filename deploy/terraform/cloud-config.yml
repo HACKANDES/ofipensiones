@@ -1,0 +1,19 @@
+#cloud-config
+groups:
+  - ofipensiones
+
+users:
+  - default
+  - name: ofipensiones
+    gecos: ofipensiones
+    shell: /bin/bash
+    primary_group: ofipensiones
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: false
+    ssh_authorized_keys:
+      - "ssh-ed25519 HASH your_email" # MODIFY THIS
+
+runcmd:
+  - sudo apt update
+  - sudo apt install python3 openssh-server

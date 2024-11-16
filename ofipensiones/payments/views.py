@@ -4,11 +4,15 @@ from rest_framework import status
 from .models import OfipensionesLog, TermPayment, Bill
 from .serializers import PaymentReceiptSerializer, BillSerializer
 
+# from authlib.integrations.django_oauth2 import ResourceProtector
+
+# require_auth = ResourceProtector()
 
 import time
 from datetime import timedelta
 
 
+# @require_auth(None)
 class PaymentReceiptList(APIView):
     def get(self, request):
         s = time.time()

@@ -1,0 +1,22 @@
+[Unit]
+Description=Ofipensiones Authentication Daemon
+Requires=ofipensiones_auth.socket
+After=network.target
+
+[Service]
+Type=exec
+User=ofisec
+Group=ofisec
+RuntimeDirectory=uvicorn
+WorkingDirectory=/home/ofisec/auth
+ExecStart=uv run --no-dev --frozen uvicorn main:app --uds /run/uvicorn.sock --workers 4
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+ProtectSystem=strict
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

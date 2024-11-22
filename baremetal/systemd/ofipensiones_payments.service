@@ -1,0 +1,21 @@
+[Unit]
+Description=Ofipensiones Payments Daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=ofipay
+Group=ofipay
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/ofipay/payments
+ExecStart=uv run --no-dev --frozen gunicorn payments.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

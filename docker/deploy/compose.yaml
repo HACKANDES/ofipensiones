@@ -1,0 +1,43 @@
+services:
+  auth:
+    build:
+      context: ../auth
+      additional_contexts:
+        - auth=../../auth
+    command: /app/.venv/bin/uvicorn --host 0.0.0.0 --port 8000 --workers 4 auth.main:app
+    ports:
+      - 8000:8000
+    env_file:
+      - path: ./.auth.env
+    healthcheck:
+      test: curl -sSf http://auth:8000/healthcheck/ || exit 1
+      start_period: 30s
+      start_interval: 10s
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      pgdb:
+        condition: service_healthy
+
+  pgdb:
+    build:
+      context: ../pg
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../../db/pg:/docker-entrypoint-initdb.d
+    shm_size: 256mb
+    env_file:
+      - path: ./.pg.env
+    healthcheck:
+      test: pg_isready -U auth_service -d ofipensiones_auth
+      start_period: 10s
+      start_interval: 5s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  pgdata:
